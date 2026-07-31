@@ -3,9 +3,16 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 dotenv.config();
 const app = express();
-app.use(express.json());
-connectDB();
 const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+        app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to the database:', error);
+    process.exit(1); 
+  }
+};
+startServer();
