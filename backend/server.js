@@ -8,7 +8,7 @@ const app = express();
 const PORT = 5000;
 app.use(express.json());
 app.use('/api/users', userRoutes);
-app.use('api/notes',noteRoutes);
+app.use('/api/notes',noteRoutes);
 const startServer = async () => {
   try {
     await connectDB();

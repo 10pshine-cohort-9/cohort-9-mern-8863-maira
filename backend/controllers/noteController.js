@@ -26,8 +26,11 @@ user: req.user.id, });
 logger.info(`Note created successfully by user ID: ${req.user.id}`);
 res.status(201).json(note);
 }
-catch(error){
-logger.error(`Failed to create note: ${error.message}`);
+catch (error) {
+if (error.name === 'ValidationError' || error.name === 'CastError') {
+return res.status(400).json({ message: 'Invalid note parameters' });
+}
+logger.error(`Failed to process note: ${error.message}`);
 res.status(500).json({ message: 'Server error' });
 }
 };
@@ -69,14 +72,17 @@ return res.status(404).json({ message: 'Note not found' });
 }
 if (note.user.toString() !== req.user.id) {
 logger.warn(`Unauthorized delete attempt on note ${req.params.id} by user ${req.user.id}`);
-return res.status(401).json({ message: 'User not authorized to delete this note' });
+return res.status(404).json({ message: 'Note not found' });
 }
 await note.deleteOne();
 logger.info(`Note deleted successfully (ID: ${req.params.id})`);
     res.status(200).json({ id: req.params.id, message: 'Note removed' });
 }
-catch(error){
-logger.error(`Failed to delete note: ${error.message}`);
+catch (error) {
+if (error.name === 'ValidationError' || error.name === 'CastError') {
+return res.status(400).json({ message: 'Invalid note parameters' });
+}
+logger.error(`Failed to process note: ${error.message}`);
 res.status(500).json({ message: 'Server error' });
 }
 };
