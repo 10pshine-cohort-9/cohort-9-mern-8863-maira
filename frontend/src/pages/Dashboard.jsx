@@ -32,7 +32,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     try {
       await API.delete(`/notes/${id}`);
-      setNotes(notes.filter((note) => note._id !== id));
+      setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
     } catch (err) {
       alert('Failed to delete note');
     }

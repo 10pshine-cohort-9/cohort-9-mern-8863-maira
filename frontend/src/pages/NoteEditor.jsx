@@ -57,8 +57,9 @@ export default function NoteEditor() {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-2 text-sm font-medium text-gray-600">Title</label>
+            <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-600">Title</label>
             <input 
+              id="title"
               type="text" 
               value={title} 
               onChange={(e) => setTitle(e.target.value)} 
@@ -69,8 +70,9 @@ export default function NoteEditor() {
           </div>
 
           <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-600">Content</label>
+            <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-600">Content</label>
             <textarea 
+              id="content"
               rows="6"
               value={content} 
               onChange={(e) => setContent(e.target.value)} 
