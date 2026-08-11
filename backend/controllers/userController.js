@@ -44,7 +44,7 @@ export const loginUser = async (req, res) => {
       logger.warn('Missing login fields');
       return res.status(400).json({ message: 'Please enter email and password' });
     }
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
       logger.warn(`User not found`);
       return res.status(401).json({ message: 'Invalid email or password' });
