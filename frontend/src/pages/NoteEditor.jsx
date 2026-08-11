@@ -44,6 +44,11 @@ export default function NoteEditor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const plainText = content.replace(/<[^>]+>/g, '').trim();
+    if (!plainText) {
+    setError('Please provide content for your note');
+    return;
+    }
     try {
       if (isEditing) {
         await API.put(`/notes/${id}`, { title, content });
@@ -82,17 +87,18 @@ export default function NoteEditor() {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-600">Content</label>
+            <label id="content-label" className="block mb-2 text-sm font-medium text-gray-600">Content</label>
             <div className="bg-white rounded-md">
               <ReactQuill 
-                id="content"
                 theme="snow" 
                 value={content} 
                 onChange={setContent} 
                 modules={modules}
                 placeholder="Write your note content here..."
                 className="h-64 mb-12"
-              />
+              >
+              <div aria-labelledby="content-label" />
+           </ReactQuill>
             </div>
           </div>
             

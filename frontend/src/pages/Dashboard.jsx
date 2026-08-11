@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../services/api';
+import DOMPurify from 'dompurify';
 
 export default function Dashboard() {
   const [notes, setNotes] = useState([]);
@@ -84,9 +85,8 @@ export default function Dashboard() {
               <div key={note._id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-200 flex flex-col justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">{note.title}</h3>
-                  <div 
-                      className="text-gray-600 text-sm mb-4 line-clamp-3 prose prose-sm" 
-                      dangerouslySetInnerHTML={{ __html: note.content }} 
+                  <div  className="text-gray-600 text-sm mb-4 line-clamp-3 prose prose-sm" 
+                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }} 
                   />
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-gray-100">
