@@ -4,6 +4,8 @@ import cors from 'cors';
 import { connectDB } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import noteRoutes from './routes/noteRoutes.js';
+import logger from './config/logger.js'; 
+import { errorHandler } from './middleware/errorMiddleware.js'; 
 dotenv.config();
 const app = express();
 const PORT = 5000;
@@ -16,14 +18,15 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/notes',noteRoutes);
+app.use(errorHandler);
 const startServer = async () => {
   try {
     await connectDB();
-        app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    app.listen(PORT, () => {
+    logger.info(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Failed to connect to the database:', error);
+    logger.error(`Failed to connect to the database: ${error.message}`);
     process.exit(1); 
   }
 };

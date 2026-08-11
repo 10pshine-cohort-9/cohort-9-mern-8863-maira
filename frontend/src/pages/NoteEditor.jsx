@@ -1,7 +1,19 @@
 import {useState, useEffect }from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import API from '../services/api';
 
+  const modules = {
+    toolbar: [
+      [{ 'header': [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      ['link'],
+      ['clean']
+    ],
+  };
+  
 export default function NoteEditor() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -71,17 +83,19 @@ export default function NoteEditor() {
 
           <div className="mb-6">
             <label htmlFor="content" className="block mb-2 text-sm font-medium text-gray-600">Content</label>
-            <textarea 
-              id="content"
-              rows="6"
-              value={content} 
-              onChange={(e) => setContent(e.target.value)} 
-              required 
-              placeholder="Write your note content here..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="bg-white rounded-md">
+              <ReactQuill 
+                id="content"
+                theme="snow" 
+                value={content} 
+                onChange={setContent} 
+                modules={modules}
+                placeholder="Write your note content here..."
+                className="h-64 mb-12"
+              />
+            </div>
           </div>
-
+            
           <div className="flex justify-end gap-4">
             <Link 
               to="/dashboard"
