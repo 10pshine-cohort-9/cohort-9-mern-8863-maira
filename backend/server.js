@@ -19,11 +19,12 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/notes',noteRoutes);
 app.use(errorHandler);
+
 const startServer = async () => {
   try {
     await connectDB();
     app.listen(PORT, () => {
-    logger.info(`Server is running on port ${PORT}`);
+      logger.info(`Server is running on port ${PORT}`);
     });
   } catch (error) {
     logger.error(`Failed to connect to the database: ${error.message}`);
