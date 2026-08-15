@@ -40,12 +40,15 @@ describe('Dashboard Component', () => {
     );
 
     expect(screen.getByText(/Notely Dashboard/i)).toBeInTheDocument();
-
     expect(screen.getByText(/Loading your notes/i)).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByText(/First Test Note/i)).toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(screen.getByText(/First Test Note/i)).toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for notes to render: ${error.message}`);
+    }
 
     expect(API.get).toHaveBeenCalledWith('/notes');
   });
@@ -61,11 +64,15 @@ describe('Dashboard Component', () => {
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(/You don't have any notes yet/i)
-      ).toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(
+          screen.getByText(/You don't have any notes yet/i)
+        ).toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for empty state message: ${error.message}`);
+    }
   });
 
   it('displays error message when notes cannot be loaded', async () => {
@@ -77,11 +84,15 @@ describe('Dashboard Component', () => {
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Failed to load notes/i)
-      ).toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(
+          screen.getByText(/Failed to load notes/i)
+        ).toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for error message to appear: ${error.message}`);
+    }
   });
 
   it('deletes a note successfully', async () => {
@@ -103,21 +114,33 @@ describe('Dashboard Component', () => {
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/Note To Delete/i)).toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(screen.getByText(/Note To Delete/i)).toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for note to render before deletion: ${error.message}`);
+    }
 
     fireEvent.click(screen.getByRole('button', { name: /Delete/i }));
 
-    await waitFor(() => {
-      expect(API.delete).toHaveBeenCalledWith('/notes/1');
-    });
+    try {
+      await waitFor(() => {
+        expect(API.delete).toHaveBeenCalledWith('/notes/1');
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for API delete call: ${error.message}`);
+    }
 
-    await waitFor(() => {
-      expect(
-        screen.queryByText(/Note To Delete/i)
-      ).not.toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(
+          screen.queryByText(/Note To Delete/i)
+        ).not.toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for note to be removed from DOM: ${error.message}`);
+    }
   });
 
   it('logs out and removes user information from localStorage', async () => {
@@ -142,6 +165,10 @@ describe('Dashboard Component', () => {
   });
 
   it('redirects to login when API returns 401', async () => {
+    // FIX: Seeding credentials before the request to prove they get deleted
+    localStorage.setItem('token', 'test-token');
+    localStorage.setItem('userName', 'Maira');
+
     API.get.mockRejectedValueOnce({
       response: {
         status: 401,
@@ -154,11 +181,15 @@ describe('Dashboard Component', () => {
       </BrowserRouter>
     );
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Failed to load notes/i)
-      ).toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(
+          screen.getByText(/Failed to load notes/i)
+        ).toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for error state on 401: ${error.message}`);
+    }
 
     expect(localStorage.getItem('token')).toBeNull();
     expect(localStorage.getItem('userName')).toBeNull();

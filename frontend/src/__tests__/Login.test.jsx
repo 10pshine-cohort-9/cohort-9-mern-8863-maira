@@ -93,12 +93,16 @@ describe('Login Component', () => {
       screen.getByRole('button', { name: /Log In/i })
     );
 
-    await waitFor(() => {
-      expect(API.post).toHaveBeenCalledWith('/users/login', {
-        email: 'test@example.com',
-        password: 'password123',
+    try {
+      await waitFor(() => {
+        expect(API.post).toHaveBeenCalledWith('/users/login', {
+          email: 'test@example.com',
+          password: 'password123',
+        });
       });
-    });
+    } catch (error) {
+      throw new Error(`Failed waiting for API login post: ${error.message}`);
+    }
 
     expect(localStorage.getItem('token')).toBe('mock-jwt-token');
     expect(localStorage.getItem('userName')).toBe('Maira');
@@ -132,10 +136,14 @@ describe('Login Component', () => {
       screen.getByRole('button', { name: /Log In/i })
     );
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Invalid credentials/i)
-      ).toBeInTheDocument();
-    });
+    try {
+      await waitFor(() => {
+        expect(
+          screen.getByText(/Invalid credentials/i)
+        ).toBeInTheDocument();
+      });
+    } catch (error) {
+      throw new Error(`Failed waiting for invalid credentials message: ${error.message}`);
+    }
   });
 });

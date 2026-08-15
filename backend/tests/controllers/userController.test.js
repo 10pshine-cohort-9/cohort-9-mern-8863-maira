@@ -19,13 +19,11 @@ app.use(express.json());
 app.post('/api/users/login', loginUser);
 app.post('/api/users/register', registerUser);
 
-
 describe('User Controller Unit Tests', () => {
 
   afterEach(() => {
     sinon.restore();
   });
-
 
   describe('POST /api/users/register', () => {
 
@@ -54,8 +52,14 @@ describe('User Controller Unit Tests', () => {
       expect(response.body.name).to.equal('Maira');
       expect(response.body.email).to.equal('maira@test.com');
       expect(response.body.token).to.equal('test-token');
+      
+      // NEW: Assert that the database received all required registration fields
+      sinon.assert.calledWith(User.create, sinon.match({
+        name: 'Maira',
+        email: 'maira@test.com',
+        password: '123456'
+      }));
     });
-
 
     it('should return 400 if a field is missing', async () => {
 
@@ -70,7 +74,6 @@ describe('User Controller Unit Tests', () => {
       expect(response.body.message)
         .to.equal('Please fill all fields');
     });
-
 
     it('should return 400 if email already exists', async () => {
 
@@ -95,7 +98,6 @@ describe('User Controller Unit Tests', () => {
         .to.equal('User already exists');
     });
 
-
     it('should return 500 if registration fails', async () => {
 
       sinon.stub(User, 'findOne')
@@ -115,7 +117,6 @@ describe('User Controller Unit Tests', () => {
     });
 
   });
-
 
   describe('POST /api/users/login', () => {
 
@@ -148,8 +149,13 @@ describe('User Controller Unit Tests', () => {
       expect(response.body.name).to.equal('Maira');
       expect(response.body.email).to.equal('maira@test.com');
       expect(response.body.token).to.equal('test-token');
+      
+      // NEW: Assert that the password field was explicitly requested from the DB
+      sinon.assert.calledWith(select, '+password');
+      
+      // NEW: Assert that bcrypt was given the correct raw vs hashed password to compare
+      sinon.assert.calledWith(bcrypt.compare, '123456', 'hashed-password');
     });
-
 
     it('should return 400 if email or password is missing', async () => {
 
@@ -163,7 +169,6 @@ describe('User Controller Unit Tests', () => {
       expect(response.body.message)
         .to.equal('Please enter email and password');
     });
-
 
     it('should return 401 for an unregistered email', async () => {
 
@@ -182,7 +187,6 @@ describe('User Controller Unit Tests', () => {
       expect(response.body.message)
         .to.equal('Invalid email or password');
     });
-
 
     it('should return 401 for a wrong password', async () => {
 
@@ -210,7 +214,6 @@ describe('User Controller Unit Tests', () => {
       expect(response.body.message)
         .to.equal('Invalid email or password');
     });
-
 
     it('should return 500 if login fails', async () => {
 
