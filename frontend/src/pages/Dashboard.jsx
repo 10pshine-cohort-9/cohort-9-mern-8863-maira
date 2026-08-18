@@ -8,7 +8,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [userName, setUserName] = useState(localStorage.getItem('userName') || '');
+  
+  const [userName] = useState(localStorage.getItem('userName') || '');
   
   useEffect(() => {
     const fetchNotes = async () => {
@@ -32,9 +33,10 @@ export default function Dashboard() {
 
   const handleDelete = async (id) => {
     try {
-      await API.delete(`/notes/${id}`);
+      await API.delete(`/notes/${encodeURIComponent(id)}`);
       setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
     } catch (err) {
+      console.error('Error deleting note:', err);
       alert('Failed to delete note');
     }
   };
@@ -51,6 +53,7 @@ export default function Dashboard() {
         <h1 className="text-xl font-bold text-gray-800">Notely Dashboard</h1>
         <p>Hi! {userName}</p>
         <button 
+          type="button"
           onClick={handleLogout}
           className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-md transition duration-200"
         >
@@ -86,7 +89,7 @@ export default function Dashboard() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">{note.title}</h3>
                   <div  className="text-gray-600 text-sm mb-4 line-clamp-3 prose prose-sm" 
-                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }} 
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }} 
                   />
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-gray-100">
@@ -97,6 +100,7 @@ export default function Dashboard() {
                     Edit
                   </Link>
                   <button 
+                    type="button"
                     onClick={() => handleDelete(note._id)}
                     className="text-sm text-red-500 hover:underline font-medium"
                   >
