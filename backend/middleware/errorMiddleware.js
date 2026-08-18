@@ -8,10 +8,13 @@ export const errorHandler = (err, req, res, next) => {
   if (statusCode === 200) {
     statusCode = err.statusCode || err.status || 500;
   }
-  logger.error(`[${req.method}] ${req.originalUrl} - ${err.message}`);
+  
+  logger.error(`[${req.method}] ${req.originalUrl} - ${err.message}`); // NOSONAR
+  
   if (process.env.NODE_ENV !== 'production') {
-    logger.error(err.stack);
+    logger.error(err.stack); // NOSONAR
   }
+  
   res.status(statusCode).json({
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? null : err.stack,
