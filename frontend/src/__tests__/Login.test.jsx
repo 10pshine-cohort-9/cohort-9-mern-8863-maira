@@ -70,7 +70,7 @@ describe('Login Component', () => {
   it('successfully logs in and saves tokens to localStorage', async () => {
     API.post.mockResolvedValueOnce({
       data: {
-        token: 'mock.login.token',
+        token: 'mock-jwt-token',
         name: 'Maira',
       },
     });
@@ -104,7 +104,7 @@ describe('Login Component', () => {
       throw new Error(`Failed waiting for API login post: ${error.message}`);
     }
 
-    expect(localStorage.getItem('token')).toBe('mock.login.token');
+    expect(localStorage.getItem('token')).toBe('mock-jwt-token');
     expect(localStorage.getItem('userName')).toBe('Maira');
     expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
   });
