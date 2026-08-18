@@ -89,7 +89,7 @@ describe('Register Component', () => {
   it('successfully registers and saves user credentials to localStorage', async () => {
     API.post.mockResolvedValueOnce({
       data: {
-        token: 'mock-signup-token',
+        token: 'mock.signup.token',
         name: 'Maira Tahir',
       },
     });
@@ -124,9 +124,7 @@ describe('Register Component', () => {
       });
     });
 
-    expect(localStorage.getItem('token')).toBe(
-      'mock-signup-token'
-    );
+    expect(localStorage.getItem('token')).toBe('mock.signup.token');
 
     expect(localStorage.getItem('userName')).toBe(
       'Maira Tahir'
