@@ -32,8 +32,13 @@ export default function Dashboard() {
   }, [navigate]);
 
   const handleDelete = async (id) => {
+    const isValidId = /^[a-zA-Z0-9_-]+$/.test(String(id));
+    if (!isValidId) {
+      console.error('Invalid Note ID format');
+      return;
+    }
     try {
-      await API.delete(`/notes/${encodeURIComponent(id)}`);
+      await API.delete(`/notes/${id}`);
       setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
     } catch (err) {
       console.error('Error deleting note:', err);
