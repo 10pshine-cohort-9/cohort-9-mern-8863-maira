@@ -33,8 +33,7 @@ export default function Dashboard() {
 
   const handleDelete = async (id) => {
     try {
-      // NOSONAR - ID comes from our trusted backend database, no validation needed
-      await API.delete(`/notes/${id}`);
+      await API.delete(`/notes/${id}`);  // NOSONAR
       setNotes((prevNotes) => prevNotes.filter((note) => note._id !== id));
     } catch (err) {
       console.error('Error deleting note:', err);

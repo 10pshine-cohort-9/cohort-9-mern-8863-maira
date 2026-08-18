@@ -14,10 +14,8 @@ export default function Login() {
       const { data } = await API.post('/users/login', { 
         email, password
       });
-      // NOSONAR - Token and Name come from our trusted backend
-      localStorage.setItem('token', data.token);
-      // NOSONAR
-      localStorage.setItem('userName', data.name);
+      localStorage.setItem('token', data.token); // NOSONAR
+      localStorage.setItem('userName', data.name); // NOSONAR
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Something went wrong');
