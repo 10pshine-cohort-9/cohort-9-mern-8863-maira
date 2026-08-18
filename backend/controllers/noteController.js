@@ -6,7 +6,7 @@ try {
 const notes = await Note.find({ user: req.user.id });
 res.status(200).json(notes);
 }
-catch (error) {
+catch {
 logger.error(`Failed to fetch notes safely`);
 res.status(500).json({ message: 'Server error' });
 }
