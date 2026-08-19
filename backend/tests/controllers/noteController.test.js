@@ -43,7 +43,6 @@ describe('Note Controller Unit Tests', () => {
       expect(response.body).to.be.an('array');
       expect(response.body[0].title).to.equal('Test Note');
       
-      // NEW: Assert the model actually filtered by the authenticated user
       sinon.assert.calledWith(Note.find, { user: '60d0fe4f5311236168a109ca' });
     });
 
@@ -71,7 +70,6 @@ describe('Note Controller Unit Tests', () => {
       expect(response.status).to.equal(201);
       expect(response.body.title).to.equal('New Note');
       
-      // NEW: Assert the correct payload was passed to the database
       sinon.assert.calledWith(Note.create, {
         title: 'New Note',
         content: 'This is a new note',
@@ -79,7 +77,6 @@ describe('Note Controller Unit Tests', () => {
       });
     });
 
-    // ... (Your 400 error tests remain exactly the same here) ...
     it('should return 400 when title is missing', async () => {
       const response = await request(app).post('/api/notes').send({ content: 'I forgot the title' });
       expect(response.status).to.equal(400);
@@ -121,16 +118,19 @@ describe('Note Controller Unit Tests', () => {
 
       expect(response.status).to.equal(200);
       
-      // NEW: Assert the ownership filter and validation rules were enforced
       sinon.assert.calledWith(
         Note.findOneAndUpdate,
         { _id: '123', user: '60d0fe4f5311236168a109ca' },
-        { title: 'Updated Note', content: 'Updated content' },
+        { 
+          $set: { 
+            title: 'Updated Note', 
+            content: 'Updated content' 
+          } 
+        },
         { new: true, runValidators: true }
       );
     });
 
-    // ... (Your 404, 400, and 500 tests remain exactly the same here) ...
     it('should return 404 if note is not found', async () => {
       sinon.stub(Note, 'findOneAndUpdate').resolves(null);
       const response = await request(app).put('/api/notes/123').send({ title: 'Updated Note', content: 'Updated content' });
@@ -167,11 +167,9 @@ describe('Note Controller Unit Tests', () => {
 
       expect(response.status).to.equal(200);
       
-      // NEW: Assert that the delete action was actually triggered
       sinon.assert.calledOnce(note.deleteOne);
     });
 
-    // ... (Your remaining error tests remain exactly the same here) ...
     it('should return 404 if note does not exist', async () => {
       sinon.stub(Note, 'findById').resolves(null);
       const response = await request(app).delete('/api/notes/123');
