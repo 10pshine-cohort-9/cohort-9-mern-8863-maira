@@ -4,10 +4,16 @@ import logger from '../config/logger.js';
 
 export const protect = async (req, res, next) => {
   let token;
-  
-  if (req.headers.authorization?.startsWith('Bearer')) {
+  const authHeader = req.headers.authorization;
+
+  if (authHeader && /^bearer\s+/i.test(authHeader)) {
     try {
-      token = req.headers.authorization.split(' ')[1];
+      token = authHeader.split(/\s+/)[1];
+      
+      if (!token) {
+        return res.status(401).json({ message: 'Not authorized, token missing' });
+      }
+
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.id).select('-password');
       

@@ -9,10 +9,15 @@ export const errorHandler = (err, req, res, next) => {
     statusCode = err.statusCode || err.status || 500;
   }
   
-  logger.error(`[${req.method}] ${req.originalUrl} - ${err.message}`); // NOSONAR
+  const safeMethod = String(req.method).replace(/[\r\n]/g, '');
+  const safeUrl = String(req.originalUrl).replace(/[\r\n]/g, '');
+  const safeMessage = String(err.message).replace(/[\r\n]/g, '');
+
+  logger.error(`[${safeMethod}] ${safeUrl} - ${safeMessage}`);
   
   if (process.env.NODE_ENV !== 'production') {
-    logger.error(err.stack); // NOSONAR
+    const safeStack = String(err.stack).replace(/[\r\n]/g, ' ');
+    logger.error(safeStack);
   }
   
   res.status(statusCode).json({
