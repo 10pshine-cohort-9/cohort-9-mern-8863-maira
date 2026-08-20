@@ -31,7 +31,7 @@ export const registerUser = async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
     });
-  } catch (error) {
+  } catch {
     logger.error('Registration failed due to an internal server exception');
     res.status(500).json({ message: 'Something went wrong' });
   }
@@ -61,7 +61,7 @@ export const loginUser = async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
     });
-  } catch (error) {
+  } catch{
     logger.error('Login failed due to an internal server exception');
     res.status(500).json({ message: 'Something went wrong' });
   }

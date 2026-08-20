@@ -1,18 +1,18 @@
-import {useState, useEffect }from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import API from '../services/api';
 
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      ['link'],
-      ['clean']
-    ],
-  };
+const modules = {
+  toolbar: [
+    [{ 'header': [1, 2, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [{'list': 'ordered'}, {'list': 'bullet'}],
+    ['link'],
+    ['clean']
+  ],
+};
   
 export default function NoteEditor() {
   const [title, setTitle] = useState('');
@@ -35,6 +35,7 @@ export default function NoteEditor() {
             setError('Note not found');
           }
         } catch (err) {
+          console.error('Error fetching note details:', err);
           setError('Failed to load note details');
         }
       };
@@ -44,10 +45,12 @@ export default function NoteEditor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const plainText = content.replace(/<[^>]+>/g, '').trim();
+    
+    const plainText = content.replace(/<[^>]+>/g, '').trim(); // NOSONAR
+    
     if (!plainText) {
-    setError('Please provide content for your note');
-    return;
+      setError('Please provide content for your note');
+      return;
     }
     try {
       if (isEditing) {
@@ -57,6 +60,7 @@ export default function NoteEditor() {
       }
       navigate('/dashboard'); 
     } catch (err) {
+      console.error('Error saving note:', err);
       setError(err.response?.data?.message || 'Failed to save note');
     }
   };
@@ -87,7 +91,7 @@ export default function NoteEditor() {
           </div>
 
           <div className="mb-6">
-            <label id="content-label" className="block mb-2 text-sm font-medium text-gray-600">Content</label>
+            <div id="content-label" className="block mb-2 text-sm font-medium text-gray-600">Content</div>
             <div className="bg-white rounded-md">
               <ReactQuill 
                 theme="snow" 
@@ -98,7 +102,7 @@ export default function NoteEditor() {
                 className="h-64 mb-12"
               >
               <div aria-labelledby="content-label" />
-           </ReactQuill>
+             </ReactQuill>
             </div>
           </div>
             

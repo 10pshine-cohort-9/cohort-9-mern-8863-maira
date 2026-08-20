@@ -28,7 +28,7 @@ jobs:
         working-directory: ./frontend
         run: |
           npm install
-          npm test
+          npm test -- --watchAll=false
 
       - name: Install Backend Dependencies and Test
         working-directory: ./backend
@@ -38,6 +38,7 @@ jobs:
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v8.1.0
+        if: env.SONAR_TOKEN != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
