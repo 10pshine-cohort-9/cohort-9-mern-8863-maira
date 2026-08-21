@@ -29,7 +29,7 @@ describe('Dashboard Component', () => {
           _id: '1',
           title: 'First Test Note',
           content: '<p>Hello world content</p>',
-          createdAt: '2026-08-21T12:00:00Z', // ADDED: Mock date to prevent "Invalid Date" render errors
+          createdAt: '2026-08-21T12:00:00Z', 
         },
       ],
     });
@@ -103,7 +103,7 @@ describe('Dashboard Component', () => {
           _id: '1',
           title: 'Note To Delete',
           content: '<p>Test content</p>',
-          createdAt: '2026-08-21T12:00:00Z', // ADDED: Mock date here too!
+          createdAt: '2026-08-21T12:00:00Z', 
         },
       ],
     });
