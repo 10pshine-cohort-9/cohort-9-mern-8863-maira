@@ -29,6 +29,7 @@ describe('Dashboard Component', () => {
           _id: '1',
           title: 'First Test Note',
           content: '<p>Hello world content</p>',
+          createdAt: '2026-08-21T12:00:00Z', // ADDED: Mock date to prevent "Invalid Date" render errors
         },
       ],
     });
@@ -39,7 +40,7 @@ describe('Dashboard Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText(/Notely Dashboard/i)).toBeInTheDocument();
+    expect(screen.getByText('Notely')).toBeInTheDocument();
     expect(screen.getByText(/Loading your notes/i)).toBeInTheDocument();
 
     try {
@@ -102,6 +103,7 @@ describe('Dashboard Component', () => {
           _id: '1',
           title: 'Note To Delete',
           content: '<p>Test content</p>',
+          createdAt: '2026-08-21T12:00:00Z', // ADDED: Mock date here too!
         },
       ],
     });
@@ -157,7 +159,11 @@ describe('Dashboard Component', () => {
       </BrowserRouter>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /Log Out/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/You don't have any notes yet/i)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Log out/i }));
 
     expect(localStorage.getItem('token')).toBeNull();
     expect(localStorage.getItem('userName')).toBeNull();
@@ -165,7 +171,6 @@ describe('Dashboard Component', () => {
   });
 
   it('redirects to login when API returns 401', async () => {
-    // FIX: Seeding credentials before the request to prove they get deleted
     localStorage.setItem('token', 'test-token');
     localStorage.setItem('userName', 'Maira');
 

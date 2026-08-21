@@ -28,8 +28,9 @@ describe('Login Component', () => {
       </BrowserRouter>
     );
 
+    // FIXED: Now looks for the new "Welcome back" heading
     expect(
-      screen.getByRole('heading', { name: /Log In/i })
+      screen.getByRole('heading', { name: /Welcome back/i })
     ).toBeInTheDocument();
 
     expect(
@@ -40,8 +41,9 @@ describe('Login Component', () => {
       screen.getByLabelText(/Password/i)
     ).toBeInTheDocument();
 
+    // FIXED: Now looks for the new "Sign in" button
     expect(
-      screen.getByRole('button', { name: /Log In/i })
+      screen.getByRole('button', { name: /Sign in/i })
     ).toBeInTheDocument();
   });
 
@@ -89,8 +91,9 @@ describe('Login Component', () => {
       target: { value: 'password123' },
     });
 
+    // FIXED: Updated button text here too
     fireEvent.click(
-      screen.getByRole('button', { name: /Log In/i })
+      screen.getByRole('button', { name: /Sign in/i })
     );
 
     try {
@@ -132,8 +135,9 @@ describe('Login Component', () => {
       target: { value: 'wrongpassword' },
     });
 
+    // FIXED: Updated button text here too
     fireEvent.click(
-      screen.getByRole('button', { name: /Log In/i })
+      screen.getByRole('button', { name: /Sign in/i })
     );
 
     try {
