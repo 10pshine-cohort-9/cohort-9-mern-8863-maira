@@ -29,7 +29,7 @@ describe('Login Component', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: /Log In/i })
+      screen.getByRole('heading', { name: /Welcome back/i })
     ).toBeInTheDocument();
 
     expect(
@@ -41,7 +41,7 @@ describe('Login Component', () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole('button', { name: /Log In/i })
+      screen.getByRole('button', { name: /Sign in/i })
     ).toBeInTheDocument();
   });
 
@@ -90,7 +90,7 @@ describe('Login Component', () => {
     });
 
     fireEvent.click(
-      screen.getByRole('button', { name: /Log In/i })
+      screen.getByRole('button', { name: /Sign in/i })
     );
 
     try {
@@ -133,7 +133,7 @@ describe('Login Component', () => {
     });
 
     fireEvent.click(
-      screen.getByRole('button', { name: /Log In/i })
+      screen.getByRole('button', { name: /Sign in/i })
     );
 
     try {

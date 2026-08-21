@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../services/api';
+import graphic from '../assets/graphic.png';
+import catLogo from '../assets/cat-logo.png';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -22,66 +24,87 @@ export default function Register() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 font-sans">
-      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Create an Account</h2>
-        
-        {error && 
-        <p className="mb-4 text-sm text-red-500 text-center">{error}</p>
-        }
-        
-        <form onSubmit={handleRegister}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-600">Full Name</label>
-            <input 
-              id="name"
-              type="text" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              required 
-              placeholder="Maira Tahir"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-600">Email Address</label>
-            <input 
-              id="email"
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
-              placeholder="you@example.com"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          
-          <div className="mb-6">
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-600">Password</label>
-            <input 
-              id="password"
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
-              placeholder="••••••••"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
-          >
-            Sign Up
-          </button>
-        </form>
-        
-        <p className="mt-6 text-sm text-center text-gray-600">
-          Already have an account? <Link to="/login" className="text-blue-600 hover:underline font-medium">Log in</Link>
-        </p>
+    <div className="flex min-h-screen bg-white font-sans">
+      
+      <div className="hidden lg:flex lg:w-1/2 bg-purple-800 justify-center items-center p-12">
+        <div className="text-white text-opacity-80 text-xl font-medium tracking-wider">
+          <img 
+            src={graphic} 
+            alt="Welcome" 
+            className="w-full max-w-md object-contain drop-shadow-lg" 
+         />
+        </div>
       </div>
+
+      <div className="w-full lg:w-1/2 flex flex-col px-8 sm:px-16 md:px-24 py-8 justify-center relative">
+        
+        <div className="absolute top-8 left-8 sm:left-16 md:left-24 font-bold text-xl text-purple-700 flex items-center gap-2">
+          <img 
+            src={catLogo} 
+            alt="Notely Cat Logo" 
+            className="h-8 w-auto object-contain" 
+          />
+          Notely
+        </div>
+
+        <div className="w-full max-w-sm mx-auto mt-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Create an Account</h2>
+          <p className="text-gray-500 mb-8 text-sm">Please enter your details to sign up</p>
+          
+          {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
+          
+          <form onSubmit={handleRegister}>
+            <div className="mb-4">
+              <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-700">Full Name</label>
+              <input 
+                id="name"
+                type="text" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                required 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">Email address</label>
+              <input 
+                id="email"
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
+              />
+            </div>
+            
+            <div className="mb-6">
+              <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+              <input 
+                id="password"
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
+              />
+            </div>
+            
+            <button 
+              type="submit" 
+              className="w-full py-2.5 px-4 bg-purple-700 hover:bg-purple-800 text-white font-medium rounded-md transition duration-200 mb-4"
+            >
+              Sign up
+            </button>
+          
+          </form>
+          
+          <p className="mt-8 text-sm text-center text-gray-600">
+            Already have an account? <Link to="/login" className="text-purple-600 hover:underline font-medium">Log in</Link>
+          </p>
+        </div>
+      </div>
+
     </div>
   );
 }
